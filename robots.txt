@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /google-apps-script/
+Disallow: /medicine-price-list.txt
+
+Sitemap: https://www.englandmeds.co.uk/sitemap.xml
