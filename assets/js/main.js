@@ -21,9 +21,9 @@ const medicines=[
 {id:'temazepam',n:'Temazepam',u:'Short-term treatment for severe sleep difficulties.',c:[0,2],s:['Sleep'],v:[['Standard',[[14,28],[28,42],[56,70],[100,100],[300,240],[500,350],[1000,600]]]]},
 {id:'zolpidem',n:'Zolpidem',u:'Short-term medicine for severe insomnia.',c:[2],s:['Sleep'],v:[['Standard',[[10,25],[30,45],[60,70],[100,100],[300,240],[500,350],[1000,600]]]]}];
 const medicinePages={
- clonazepam:'pase-clonazepam-2mg-elm.html',alprazolam:'alprax-alprazolam-2-mg-elm.html',midazolam:'midolam-midazolam-7-5-mg.html',
- diazepam:'diazepam-martin-dow-10mg-elm.html',lorazepam:'lorazepam-ativan-2-mg-e.html',nitrazepam:'noctin-nitrazepam-5-mg-elm.html',
- zopiclone:'zopiclone-price-in-england-uk.html',pregabalin:'pregabalin-pregacare-nt-e.html',modifinal:'modafinil-price-in-england-uk.html',bromazepam:'bromazepam-version-3.html'
+ clonazepam:'pase-clonazepam-2mg-elm',alprazolam:'alprax-alprazolam-2-mg-elm',midazolam:'midolam-midazolam-7-5-mg',
+ diazepam:'diazepam-martin-dow-10mg-elm',lorazepam:'lorazepam-ativan-2-mg-e',nitrazepam:'noctin-nitrazepam-5-mg-elm',
+ zopiclone:'zopiclone-price-in-england-uk',pregabalin:'pregabalin-pregacare-nt-e',modifinal:'modafinil-price-in-england-uk',bromazepam:'bromazepam-version-3'
 };
 const listedMedicines=medicines.filter(m=>medicinePages[m.id]);
 let active='all',query='',product=null,variant=0,pack=0;let cart=JSON.parse(localStorage.getItem('englandmedsCart')||'[]');
