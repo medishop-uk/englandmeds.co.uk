@@ -2,7 +2,9 @@ Options -Indexes
 RewriteEngine On
 
 # Force the production hostname only when the request is already for EnglandMeds.
-# localhost and other development hosts remain local.
+# Explicitly exclude XAMPP development hosts so the project subdirectory is
+# never appended to the live domain.
+RewriteCond %{HTTP_HOST} !^(?:localhost|127\.0\.0\.1)(?::[0-9]+)?$ [NC]
 RewriteCond %{HTTP_HOST} ^(?:www\.)?englandmeds\.co\.uk$ [NC]
 RewriteCond %{HTTPS} !=on [OR]
 RewriteCond %{HTTP_HOST} !^www\.englandmeds\.co\.uk$ [NC]
@@ -18,7 +20,6 @@ RewriteRule ^ %{REQUEST_SCHEME}://%{HTTP_HOST}/%1 [R=301,L,NE]
 RedirectMatch 301 ^/(search|user/profile|test-header)/?$ https://www.englandmeds.co.uk/
 RedirectMatch 301 ^/(terms-and-conditions|privacy-policy|contact-us)/?$ https://www.englandmeds.co.uk/about-us/
 RedirectMatch 301 ^/service-area/?$ https://www.englandmeds.co.uk/
-RedirectMatch 301 ^/shop/category/.*$ https://www.englandmeds.co.uk/shop/
 
 # Legacy paths whose slugs changed.
 Redirect 301 /service-area/online-pharmacy-in-leed https://www.englandmeds.co.uk/service-area/best-online-pharmacy-in-leeds
