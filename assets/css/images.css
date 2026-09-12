@@ -1,0 +1,11 @@
+/* Keep image dimensions bounded within the existing responsive layouts. */
+.medicine-photo img { display:block; width:100%; height:100%; max-width:100%; object-fit:contain; }
+.card-art.medicine-photo { padding:20px; }
+.card-art.editorial-photo { padding:0; overflow:hidden; }
+.card-art.editorial-photo::after, .card-art.medicine-photo::after { display:none; }
+.card-art.medicine-photo img { min-height:0; }
+.card-art.editorial-photo img { display:block; width:100%; height:100%; object-fit:cover; }
+.article-photo { margin:0 0 30px; width:100%; overflow:hidden; border-radius:16px; }
+.article-photo img { display:block; width:100%; height:auto; max-height:520px; object-fit:cover; }
+.blog-photo-hero { background-size:cover; background-position:center; }
+@media(max-width:600px) { .article-photo { margin-bottom:22px; border-radius:12px; } }
