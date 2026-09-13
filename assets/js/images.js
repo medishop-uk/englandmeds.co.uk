@@ -45,6 +45,24 @@
     });
   }
   function init() {
+    const banner = document.querySelector('.homepage-slider');
+    if (banner) {
+      const frames = [...banner.querySelectorAll('.slider-images img')];
+      const dots = [...banner.querySelectorAll('[data-banner]')];
+      const pause = banner.querySelector('[data-banner-pause]');
+      let index = 0, paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function show(next) {
+        index = (next + frames.length) % frames.length;
+        frames.forEach((img,i) => { img.hidden = i !== index; });
+        dots.forEach((dot,i) => dot.setAttribute('aria-pressed', String(i === index)));
+      }
+      dots.forEach(dot => dot.addEventListener('click', () => show(Number(dot.dataset.banner))));
+      banner.querySelector('[data-banner-prev]').addEventListener('click', () => show(index-1));
+      banner.querySelector('[data-banner-next]').addEventListener('click', () => show(index+1));
+      pause.textContent = paused ? 'Play' : 'Pause';
+      pause.addEventListener('click', () => { paused = !paused; pause.textContent = paused ? 'Play' : 'Pause'; });
+      setInterval(() => { if (!paused && !document.hidden && !banner.matches(':hover') && !banner.contains(document.activeElement)) show(index+1); }, 6000);
+    }
     medicineCards();
     const current = slug(location.pathname);
     const product = document.querySelector('.product-main-image');

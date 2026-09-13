@@ -18,7 +18,7 @@ RewriteRule ^ %{REQUEST_SCHEME}://%{HTTP_HOST}/%1 [R=301,L,NE]
 
 # Legacy utility routes.
 RedirectMatch 301 ^/(search|user/profile|test-header)/?$ https://www.englandmeds.co.uk/
-RedirectMatch 301 ^/(terms-and-conditions|privacy-policy|contact-us)/?$ https://www.englandmeds.co.uk/about-us/
+RedirectMatch 301 ^/(terms-and-conditions|privacy-policy)/?$ https://www.englandmeds.co.uk/about-us/
 RedirectMatch 301 ^/service-area/?$ https://www.englandmeds.co.uk/
 
 # Legacy paths whose slugs changed.
