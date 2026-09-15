@@ -2,13 +2,6 @@
 (() => {
   'use strict';
   const base = new URL('../img/', document.currentScript.src);
-  const medicine = {
-    'diazepam-martin-dow-10mg-elm': 'valium.jpg',
-    'noctin-nitrazepam-5-mg-elm': 'noctin.jpg',
-    'rivotril-clonazepam-2mg-elm': 'rivotril-2.jpg',
-    'sedil-5-mg-diazepam-elm': 'sedil.jpg',
-    'zopiclone-price-in-england-uk': 'zopiclone-tablets.jpg'
-  };
   const posts = {
     'englandmeds': 'englandmeds-blog-image-1jpg.jpg',
     'buy-medication-without-prescription-in-the-united-kingdom-englandmeds': 'englandmeds-blog-image-2jpg.jpg',
@@ -33,18 +26,12 @@
     img.decoding = 'async';
     return img;
   }
-  function medicineCards() {
-    document.querySelectorAll('.medicine-card, .category-product-card, .shop-card').forEach(card => {
-      const link = card.querySelector('a[href*="medicine/"]');
-      const file = link && medicine[slug(new URL(link.href).pathname)];
-      const frame = card.querySelector('.medicine-image-link, .category-product-art, .card-art');
-      if (!file || !frame || frame.dataset.photo) return;
-      frame.dataset.photo = 'true';
-      frame.classList.add('medicine-photo');
-      frame.replaceChildren(photo('medicine/' + file, card.querySelector('h2,h3')?.textContent.trim() || 'Medicine packaging'));
-    });
-  }
   function init() {
+    const contacts = document.createElement('nav');
+    contacts.className = 'floating-contacts';
+    contacts.setAttribute('aria-label', 'Contact EnglandMeds');
+    contacts.innerHTML = '<a class="floating-whatsapp" href="https://wa.me/447438135064" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.7 11.7 0 0 0 2.1 17.6L.5 23.5l6-1.6A11.7 11.7 0 0 0 20.5 3.5ZM12 21a9 9 0 0 1-4.6-1.3l-.3-.2-3.5.9.9-3.4-.2-.4A9 9 0 1 1 12 21Zm5-6.7c-.3-.2-1.7-.8-2-.9s-.5-.2-.7.2-.8.9-1 1-.4.2-.7 0a7.5 7.5 0 0 1-3.7-3.2c-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.6L8.8 7c-.2-.5-.4-.5-.7-.5h-.6c-.2 0-.6.1-.8.4-2.4 2.6.6 6.3 1 6.8.3.4 3 4.5 7.3 5.1 1 .2 2.3-.4 2.6-1.1.3-.7.3-1.3.2-1.4-.1-.2-.4-.3-.8-.5Z"/></svg></a><a class="floating-telegram" href="https://t.me/BenzoAddy" target="_blank" rel="noopener noreferrer" aria-label="Chat on Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.5 3-3.4 17c-.3 1.2-1 1.5-2 .9l-5.2-3.9-2.5 2.4c-.3.3-.5.5-1 .5l.4-5.3 9.6-8.7c.4-.4-.1-.6-.6-.3L5 13.1.9 11.8c-1.1-.3-1.1-1.1.2-1.6L20 2.9c.9-.3 1.7.2 1.5 1.1Z"/></svg></a>';
+    document.body.append(contacts);
     const banner = document.querySelector('.homepage-slider');
     if (banner) {
       const frames = [...banner.querySelectorAll('.slider-images img')];
@@ -63,13 +50,7 @@
       pause.addEventListener('click', () => { paused = !paused; pause.textContent = paused ? 'Play' : 'Pause'; });
       setInterval(() => { if (!paused && !document.hidden && !banner.matches(':hover') && !banner.contains(document.activeElement)) show(index+1); }, 6000);
     }
-    medicineCards();
     const current = slug(location.pathname);
-    const product = document.querySelector('.product-main-image');
-    if (product && medicine[current]) {
-      product.classList.add('medicine-photo');
-      product.replaceChildren(photo('medicine/' + medicine[current], document.querySelector('h1').textContent.trim(), true));
-    }
     document.querySelectorAll('.content-card').forEach(card => {
       const link = card.querySelector('a[href*="post/"]');
       const file = link && posts[slug(new URL(link.href).pathname)];
@@ -94,8 +75,6 @@
         hero.style.backgroundImage = 'linear-gradient(90deg,rgba(247,251,253,.97),rgba(247,251,253,.87)),url("' + new URL('blog/blog-breadcrumb-' + (isPost ? '2' : '1') + '.webp', base).href + '")';
       }
     }
-    const grid = document.querySelector('#medicine-grid') || document.querySelector('.medicine-card')?.parentElement;
-    if (grid) new MutationObserver(medicineCards).observe(grid, {childList: true});
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once: true});
   else init();
