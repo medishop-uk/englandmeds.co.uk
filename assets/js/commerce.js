@@ -36,7 +36,10 @@ var slugMap={
 };
 Object.assign(slugMap,{
 'alprax-alprazolam-2-mg-mlx':'alprazolam','alprazolam-alprax-1-mg-mlx':'alprazolam','rlam-1-mg-alprazolam-mlx':'alprazolam','bromazepam-version-2':'bromazepam','pase-clonazepam-2mg-mlx':'clonazepam','rivotril-clonazepam-2mg-mlx':'clonazepam','easium-diazepam-10mg-mlx':'diazepam','diazepam-martin-dow-10mg-mlx':'diazepam','sedil-diazepam-5-mg-mlx':'diazepam','lorazepam-ativan-2-mg-e':'lorazepam','midolam-midazolam-7-5-mg':'midazolam','modafinil-version-2':'modafinil','noctin-nitrazepam-5-mg-mlx':'nitrazepam','pregabalin-pregacare-nt-m':'pregabalin','zopiclone-7-5mg-version-2':'zopiclone'
-});var productSlug=location.pathname.split('/').filter(Boolean).pop().replace(/\.html$/,'');
+});
+// Match the current EnglandMeds URLs to the existing catalogue.
+Object.entries({"alprax-alprazolam-1-mg-elm": "alprazolam-alprax-1mg", "alprax-alprazolam-2-mg-elm": "alprazolam-alprax-2mg", "bromazepam-version-3": "bromazepam", "diazepam-martin-dow-10mg-elm": "diazepam-martin-dow-10mg", "easium-diazepam-10mg-elm": "diazepam-easium-10mg", "modafinil-price-in-england-uk": "modafinil", "noctin-nitrazepam-5-mg-elm": "nitrazepam-noctin-5mg", "pase-clonazepam-2mg-elm": "clonazepam-pase-2mg", "pregabalin-pregacare-nt-e": "pregabalin-pregacare-nt", "rivotril-clonazepam-2mg-elm": "clonazepam-rivotril-2mg", "rlam-alprazolam-1-mg-elm": "alprazolam-rlam-1mg", "sedil-5-mg-diazepam-elm": "diazepam-sedil-5mg", "zopiclone-price-in-england-uk": "zopiclone-7-5mg"}).forEach(function(entry){slugMap[entry[0]]=slugMap[entry[1]]});
+var productSlug=location.pathname.split('/').filter(Boolean).pop().replace(/\.html$/,'');
 var productKey=slugMap[productSlug],variants=pricing[productKey]||pricing.benzit,selectedVariant=0,selectedPack=0;
 var productName=(document.querySelector('.product-breadcrumb span:last-child')||{}).textContent||productKey;
 var cart=[];
@@ -62,18 +65,27 @@ function newOrder(channel){
  var postageSelect=document.querySelector('#commerce-postage'),postage=Number(postageSelect?postageSelect.value:12),subtotal=cart.reduce(function(sum,item){return sum+Number(item.price)*Number(item.quantity||1)},0);
  return {orderId:'ELM-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).slice(2,6).toUpperCase(),timestamp:new Date().toISOString(),channel:channel,status:'New',items:cart,subtotal:subtotal,postage:postage,total:subtotal+postage,currency:'GBP',pageUrl:location.href,utmSource:new URLSearchParams(location.search).get('utm_source')||'',utmMedium:new URLSearchParams(location.search).get('utm_medium')||'',utmCampaign:new URLSearchParams(location.search).get('utm_campaign')||''}
 }
+var checkoutPending=false;
 async function checkout(channel){
- var status=document.querySelector('[data-checkout-status]');if(!cart.length)return;
- if(!DATA_API_URL){status.textContent='Checkout storage is not configured. Your request has not been sent.';return}
- var order=newOrder(channel);status.textContent='Saving your request securely…';document.querySelectorAll('[data-checkout]').forEach(function(button){button.disabled=true});
+ if(checkoutPending||!cart.length)return;
+ checkoutPending=true;
+ var status=document.querySelector('[data-checkout-status]'),order=newOrder(channel);
+ var target=channel==='whatsapp'?whatsapp+'?text='+encodeURIComponent(orderMessage(order,channel)):telegram;
+ status.textContent='Opening '+(channel==='whatsapp'?'WhatsApp':'Telegram')+'...';
+ document.querySelectorAll('[data-checkout]').forEach(function(button){button.disabled=true});
  try{
-  var controller=new AbortController(),timer=setTimeout(function(){controller.abort()},12000);
-  var response=await fetch(DATA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'createOrder',order:order,userAgent:navigator.userAgent}),signal:controller.signal});clearTimeout(timer);
-  var result=await response.json();if(!response.ok||!result.ok||(result.spreadsheetId&&DATA_SPREADSHEET_ID&&result.spreadsheetId!==DATA_SPREADSHEET_ID))throw new Error(result.error||'Could not save request');
-  localStorage.removeItem('englandmedsCart');cart=[];if(typeof window.gtag==='function')window.gtag('event','purchase',{transaction_id:order.orderId,currency:'GBP',value:order.total,shipping:order.postage,items:order.items.map(function(item){return {item_id:item.slug||item.key,item_name:item.name,item_variant:item.type,price:item.price,quantity:item.quantity}})});
-  var target=channel==='whatsapp'?whatsapp+'?text='+encodeURIComponent(orderMessage(order,channel)):telegram;location.href=target
- }catch(error){status.textContent='We could not save your request. Please try again.';document.querySelectorAll('[data-checkout]').forEach(function(button){button.disabled=false})}
+  var saved=await window.englandmedsSaveOrder(DATA_API_URL,DATA_SPREADSHEET_ID,order);
+  if(saved){
+   localStorage.removeItem('englandmedsCart');cart=[];
+   if(typeof window.gtag==='function')window.gtag('event','purchase',{transaction_id:order.orderId,currency:'GBP',value:order.total,shipping:order.postage,items:order.items.map(function(item){return {item_id:item.slug||item.key,item_name:item.name,item_variant:item.type,price:item.price,quantity:item.quantity}})});
+  }
+ }catch(error){
+  // Keep the basket when recording fails; contact checkout still continues.
+ }finally{
+  location.href=target;
+ }
 }
+
 function renderCart(){
  var items=document.querySelector('[data-commerce-items]'),footer=document.querySelector('[data-commerce-footer]');if(!items||!footer)return;
  if(!cart.length){items.innerHTML='<div class="commerce-empty"><h3>Your basket is empty</h3><p>Select a variant and pack to begin.</p></div>';footer.innerHTML='';return}

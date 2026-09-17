@@ -1,4 +1,4 @@
-Options -Indexes
+Options -Indexes -MultiViews
 RewriteEngine On
 
 # Force the production hostname only when the request is already for EnglandMeds.
@@ -16,54 +16,58 @@ RewriteRule ^ %{REQUEST_SCHEME}://%{HTTP_HOST}/%1 [R=301,L,NE]
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.html(?:[?\s]) [NC]
 RewriteRule ^ %{REQUEST_SCHEME}://%{HTTP_HOST}/%1 [R=301,L,NE]
 
+# Keep internal project files off the public site.
+RewriteRule ^(?:\.git|tools|google-apps-script)(?:/|$) - [F,L]
+RewriteRule ^(?:README\.md|medicine-price-list\.txt|sitemap-old\.xml)$ - [F,L]
+
 # Legacy utility routes.
 RedirectMatch 301 ^/(search|user/profile|test-header)/?$ https://www.englandmeds.co.uk/
 RedirectMatch 301 ^/(terms-and-conditions|privacy-policy)/?$ https://www.englandmeds.co.uk/about-us/
 RedirectMatch 301 ^/service-area/?$ https://www.englandmeds.co.uk/
 
 # Legacy paths whose slugs changed.
-Redirect 301 /service-area/online-pharmacy-in-leed https://www.englandmeds.co.uk/service-area/best-online-pharmacy-in-leeds
-Redirect 301 /service-area/online-pharmacy-in-bristol https://www.englandmeds.co.uk/service-area/safe-online-pharmacy-in-bristol
-Redirect 301 /service-area/online-pharmacy-in-bradford https://www.englandmeds.co.uk/service-area/genuine-online-pharmacy-in-bradford
-Redirect 301 /service-area/safe-online-pharmacy-in-workington https://www.englandmeds.co.uk/service-area/safe-online-pharmacy-in-workington-englandmeds-uk
-Redirect 301 /service-area/trusted-online-pharmacy-in-weymouth https://www.englandmeds.co.uk/service-area/best-online-drugstore-in-weymouth
-Redirect 301 /service-area/reliable-online-dispensary-in-england https://www.englandmeds.co.uk/service-area/best-online-drugstore-in-england
-Redirect 301 /service-area/safe-online-pharmacy-in-cambridge https://www.englandmeds.co.uk/service-area/safe-online-pharmacy-in-cambridge-englandmeds
-Redirect 301 /service-area/best-online-pharmacy-in-oxford https://www.englandmeds.co.uk/service-area/best-online-pharmacy-in-oxford-englandmeds
-Redirect 301 /service-area/reliable-online-pharmacy-in-canterbury https://www.englandmeds.co.uk/service-area/reliable-online-pharmacy-in-canterbury-englandmeds
-Redirect 301 /anxiety-medicines-in-the-united-kingdom https://www.englandmeds.co.uk/landing-page/anxiety-medicines-in-the-united-kingdom-englandmeds
-Redirect 301 /sleeping-pills-in-the-united-kingdom https://www.englandmeds.co.uk/landing-page/sleeping-pills-in-the-united-kingdom-englandmeds
-Redirect 301 /shop/diazepam-sedil-5mg https://www.englandmeds.co.uk/shop/medicine/sedil-5-mg-diazepam-elm
-Redirect 301 /shop/diazepam-martin-dows-10mg https://www.englandmeds.co.uk/shop/medicine/diazepam-martin-dow-10mg-elm
-Redirect 301 /shop/diazepam-easium-10mg https://www.englandmeds.co.uk/shop/medicine/easium-diazepam-10mg-elm
-Redirect 301 /shop/alprazolam-alprax-2-mg https://www.englandmeds.co.uk/shop/medicine/alprax-alprazolam-2-mg-elm
-Redirect 301 /shop/alprazolam-rlam-1mg https://www.englandmeds.co.uk/shop/medicine/rlam-alprazolam-1-mg-elm
-Redirect 301 /shop/alprazolam-alprax-1-mg https://www.englandmeds.co.uk/shop/medicine/alprax-alprazolam-1-mg-elm
-Redirect 301 /shop/nitrazepam-noctin-5mg https://www.englandmeds.co.uk/shop/medicine/noctin-nitrazepam-5-mg-elm
-Redirect 301 /shop/midazolam-midolam75-mg https://www.englandmeds.co.uk/shop/medicine/midolam-midazolam-7-5-mg
-Redirect 301 /shop/clonazepam-rivotril-2-mg https://www.englandmeds.co.uk/shop/medicine/rivotril-clonazepam-2mg-elm
-Redirect 301 /shop/pregacare-nt-pregabalin https://www.englandmeds.co.uk/shop/medicine/pregabalin-pregacare-nt-e
-Redirect 301 /shop/pregabalin-neurabalin-75mg https://www.englandmeds.co.uk/shop/medicine/pregabalin-pregacare-nt-e
-Redirect 301 /shop/nervasin-pregabalin https://www.englandmeds.co.uk/shop/medicine/pregabalin-pregacare-nt-e
-Redirect 301 /shop/ativan-lorazepam-2-mg https://www.englandmeds.co.uk/shop/medicine/lorazepam-ativan-2-mg-e
-Redirect 301 /shop/nerodalam-lorazepam https://www.englandmeds.co.uk/shop/medicine/lorazepam-ativan-2-mg-e
-Redirect 301 /shop/zopiclone-7-5mg-tablet https://www.englandmeds.co.uk/shop/medicine/zopiclone-price-in-england-uk
-Redirect 301 /shop/modafinil https://www.englandmeds.co.uk/shop/medicine/modafinil-price-in-england-uk
-Redirect 301 /shop/bromazepam https://www.englandmeds.co.uk/shop/medicine/bromazepam-version-3
-Redirect 301 /shop/midazolam-hypnofast-7.5mg https://www.englandmeds.co.uk/shop/medicine/midolam-midazolam-7-5-mg
-Redirect 301 /shop/royal-tapentadol-225mg https://www.englandmeds.co.uk/shop/
-Redirect 301 /shop/aspa-tapentadol-200mg https://www.englandmeds.co.uk/shop/
-Redirect 301 /shop/etizolam https://www.englandmeds.co.uk/shop/
-Redirect 301 /shop/temazepam https://www.englandmeds.co.uk/shop/
-Redirect 301 /shop/co-codamol-500mg https://www.englandmeds.co.uk/shop/
-Redirect 301 /blog/how-to-safely-order-prescription-medicines-online-in-the-uk https://www.englandmeds.co.uk/blog/post/how-to-safely-order-prescription-medicines-online-in-the-uk-elm
-Redirect 301 /blog/safe-prescription-medicines-online-uk https://www.englandmeds.co.uk/blog/post/guide-for-safe-prescription-medicines-england-meds
-Redirect 301 /blog/generalized-anxiety-disorder-vs-panic-disorder https://www.englandmeds.co.uk/blog/post/generalised-anxiety-disorder-vs-panic-disorder
-Redirect 301 /blog/stop-panic-attack-fast https://www.englandmeds.co.uk/blog/post/how-to-stop-a-panic-attack-fast
-Redirect 301 /blog/neuropathy-causes-symptoms-treatment https://www.englandmeds.co.uk/blog/post/neuropathy-or-nerve-pain-causes-symptoms-treatment-options
-Redirect 301 /blog/panic-attack-symptoms-causes-and-what-to-do https://www.englandmeds.co.uk/blog/post/panic-attack-symptoms-causes-what-to-do
-Redirect 301 /blog/buy-medication-without-prescription-united-kingdom https://www.englandmeds.co.uk/blog/post/buy-medication-without-prescription-in-the-united-kingdom-englandmeds
-Redirect 301 /blog/nhs-gphc-law-online-pharmacy-uk https://www.englandmeds.co.uk/blog/post/nhs-gphc-law-for-online-pharmacy-uk
+RedirectMatch 301 ^/service\-area/online\-pharmacy\-in\-leed/?$ https://www.englandmeds.co.uk/service-area/best-online-pharmacy-in-leeds
+RedirectMatch 301 ^/service\-area/online\-pharmacy\-in\-bristol/?$ https://www.englandmeds.co.uk/service-area/safe-online-pharmacy-in-bristol
+RedirectMatch 301 ^/service\-area/online\-pharmacy\-in\-bradford/?$ https://www.englandmeds.co.uk/service-area/genuine-online-pharmacy-in-bradford
+RedirectMatch 301 ^/service\-area/safe\-online\-pharmacy\-in\-workington/?$ https://www.englandmeds.co.uk/service-area/safe-online-pharmacy-in-workington-englandmeds-uk
+RedirectMatch 301 ^/service\-area/trusted\-online\-pharmacy\-in\-weymouth/?$ https://www.englandmeds.co.uk/service-area/best-online-drugstore-in-weymouth
+RedirectMatch 301 ^/service\-area/reliable\-online\-dispensary\-in\-england/?$ https://www.englandmeds.co.uk/service-area/best-online-drugstore-in-england
+RedirectMatch 301 ^/service\-area/safe\-online\-pharmacy\-in\-cambridge/?$ https://www.englandmeds.co.uk/service-area/safe-online-pharmacy-in-cambridge-englandmeds
+RedirectMatch 301 ^/service\-area/best\-online\-pharmacy\-in\-oxford/?$ https://www.englandmeds.co.uk/service-area/best-online-pharmacy-in-oxford-englandmeds
+RedirectMatch 301 ^/service\-area/reliable\-online\-pharmacy\-in\-canterbury/?$ https://www.englandmeds.co.uk/service-area/reliable-online-pharmacy-in-canterbury-englandmeds
+RedirectMatch 301 ^/anxiety\-medicines\-in\-the\-united\-kingdom/?$ https://www.englandmeds.co.uk/landing-page/anxiety-medicines-in-the-united-kingdom-englandmeds
+RedirectMatch 301 ^/sleeping\-pills\-in\-the\-united\-kingdom/?$ https://www.englandmeds.co.uk/landing-page/sleeping-pills-in-the-united-kingdom-englandmeds
+RedirectMatch 301 ^/shop/diazepam\-sedil\-5mg/?$ https://www.englandmeds.co.uk/shop/medicine/sedil-5-mg-diazepam-elm
+RedirectMatch 301 ^/shop/diazepam\-martin\-dows\-10mg/?$ https://www.englandmeds.co.uk/shop/medicine/diazepam-martin-dow-10mg-elm
+RedirectMatch 301 ^/shop/diazepam\-easium\-10mg/?$ https://www.englandmeds.co.uk/shop/medicine/easium-diazepam-10mg-elm
+RedirectMatch 301 ^/shop/alprazolam\-alprax\-2\-mg/?$ https://www.englandmeds.co.uk/shop/medicine/alprax-alprazolam-2-mg-elm
+RedirectMatch 301 ^/shop/alprazolam\-rlam\-1mg/?$ https://www.englandmeds.co.uk/shop/medicine/rlam-alprazolam-1-mg-elm
+RedirectMatch 301 ^/shop/alprazolam\-alprax\-1\-mg/?$ https://www.englandmeds.co.uk/shop/medicine/alprax-alprazolam-1-mg-elm
+RedirectMatch 301 ^/shop/nitrazepam\-noctin\-5mg/?$ https://www.englandmeds.co.uk/shop/medicine/noctin-nitrazepam-5-mg-elm
+RedirectMatch 301 ^/shop/midazolam\-midolam75\-mg/?$ https://www.englandmeds.co.uk/shop/medicine/midolam-midazolam-7-5-mg
+RedirectMatch 301 ^/shop/clonazepam\-rivotril\-2\-mg/?$ https://www.englandmeds.co.uk/shop/medicine/rivotril-clonazepam-2mg-elm
+RedirectMatch 301 ^/shop/pregacare\-nt\-pregabalin/?$ https://www.englandmeds.co.uk/shop/medicine/pregabalin-pregacare-nt-e
+RedirectMatch 301 ^/shop/pregabalin\-neurabalin\-75mg/?$ https://www.englandmeds.co.uk/shop/medicine/pregabalin-pregacare-nt-e
+RedirectMatch 301 ^/shop/nervasin\-pregabalin/?$ https://www.englandmeds.co.uk/shop/medicine/pregabalin-pregacare-nt-e
+RedirectMatch 301 ^/shop/ativan\-lorazepam\-2\-mg/?$ https://www.englandmeds.co.uk/shop/medicine/lorazepam-ativan-2-mg-e
+RedirectMatch 301 ^/shop/nerodalam\-lorazepam/?$ https://www.englandmeds.co.uk/shop/medicine/lorazepam-ativan-2-mg-e
+RedirectMatch 301 ^/shop/zopiclone\-7\-5mg\-tablet/?$ https://www.englandmeds.co.uk/shop/medicine/zopiclone-price-in-england-uk
+RedirectMatch 301 ^/shop/modafinil/?$ https://www.englandmeds.co.uk/shop/medicine/modafinil-price-in-england-uk
+RedirectMatch 301 ^/shop/bromazepam/?$ https://www.englandmeds.co.uk/shop/medicine/bromazepam-version-3
+RedirectMatch 301 ^/shop/midazolam\-hypnofast\-7\.5mg/?$ https://www.englandmeds.co.uk/shop/medicine/midolam-midazolam-7-5-mg
+RedirectMatch 301 ^/shop/royal\-tapentadol\-225mg/?$ https://www.englandmeds.co.uk/shop/
+RedirectMatch 301 ^/shop/aspa\-tapentadol\-200mg/?$ https://www.englandmeds.co.uk/shop/
+RedirectMatch 301 ^/shop/etizolam/?$ https://www.englandmeds.co.uk/shop/
+RedirectMatch 301 ^/shop/temazepam/?$ https://www.englandmeds.co.uk/shop/
+RedirectMatch 301 ^/shop/co\-codamol\-500mg/?$ https://www.englandmeds.co.uk/shop/
+RedirectMatch 301 ^/blog/how\-to\-safely\-order\-prescription\-medicines\-online\-in\-the\-uk/?$ https://www.englandmeds.co.uk/blog/post/how-to-safely-order-prescription-medicines-online-in-the-uk-elm
+RedirectMatch 301 ^/blog/safe\-prescription\-medicines\-online\-uk/?$ https://www.englandmeds.co.uk/blog/post/guide-for-safe-prescription-medicines-england-meds
+RedirectMatch 301 ^/blog/generalized\-anxiety\-disorder\-vs\-panic\-disorder/?$ https://www.englandmeds.co.uk/blog/post/generalised-anxiety-disorder-vs-panic-disorder
+RedirectMatch 301 ^/blog/stop\-panic\-attack\-fast/?$ https://www.englandmeds.co.uk/blog/post/how-to-stop-a-panic-attack-fast
+RedirectMatch 301 ^/blog/neuropathy\-causes\-symptoms\-treatment/?$ https://www.englandmeds.co.uk/blog/post/neuropathy-or-nerve-pain-causes-symptoms-treatment-options
+RedirectMatch 301 ^/blog/panic\-attack\-symptoms\-causes\-and\-what\-to\-do/?$ https://www.englandmeds.co.uk/blog/post/panic-attack-symptoms-causes-what-to-do
+RedirectMatch 301 ^/blog/buy\-medication\-without\-prescription\-united\-kingdom/?$ https://www.englandmeds.co.uk/blog/post/buy-medication-without-prescription-in-the-united-kingdom-englandmeds
+RedirectMatch 301 ^/blog/nhs\-gphc\-law\-online\-pharmacy\-uk/?$ https://www.englandmeds.co.uk/blog/post/nhs-gphc-law-for-online-pharmacy-uk
 
 # Serve extensionless URLs from the existing static HTML files.
 RewriteCond %{REQUEST_FILENAME} !-f

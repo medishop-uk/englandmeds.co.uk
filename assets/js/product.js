@@ -47,7 +47,10 @@ Object.assign(catalog,{
 'noctin-nitrazepam-5-mg-mlx':['Noctin Nitrazepam 5mg','Noctin','Verified manufacturer','Sleep & insomnia',20],
 'pregabalin-pregacare-nt-m':['Pregabalin Pregacare','Pregacare','Verified manufacturer','Nerve pain',30],
 'zopiclone-7-5mg-version-2':['Zopiclone 7.5mg','Zopiclone','Verified manufacturer','Sleep & insomnia',20]
-});function text(value){return String(value||'').replace(/\s+/g,' ').trim()}
+});
+// Match the current EnglandMeds URLs to the existing catalogue.
+Object.entries({"alprax-alprazolam-1-mg-elm": "alprazolam-alprax-1mg", "alprax-alprazolam-2-mg-elm": "alprazolam-alprax-2mg", "bromazepam-version-3": "bromazepam", "diazepam-martin-dow-10mg-elm": "diazepam-martin-dow-10mg", "easium-diazepam-10mg-elm": "diazepam-easium-10mg", "modafinil-price-in-england-uk": "modafinil", "noctin-nitrazepam-5-mg-elm": "nitrazepam-noctin-5mg", "pase-clonazepam-2mg-elm": "clonazepam-pase-2mg", "pregabalin-pregacare-nt-e": "pregabalin-pregacare-nt", "rivotril-clonazepam-2mg-elm": "clonazepam-rivotril-2mg", "rlam-alprazolam-1-mg-elm": "alprazolam-rlam-1mg", "sedil-5-mg-diazepam-elm": "diazepam-sedil-5mg", "zopiclone-price-in-england-uk": "zopiclone-7-5mg"}).forEach(function(entry){catalog[entry[0]]=catalog[entry[1]]});
+function text(value){return String(value||'').replace(/\s+/g,' ').trim()}
 function slug(){return location.pathname.split('/').filter(Boolean).pop().replace(/\.html$/,'')}
 function field(label,scope){var nodes=scope.querySelectorAll('li,p');for(var i=0;i<nodes.length;i++){var value=text(nodes[i].textContent);if(value.toLowerCase().indexOf(label.toLowerCase()+':')===0)return text(value.slice(value.indexOf(':')+1))}return ''}
 function stars(value){var html='<span class="review-stars" aria-label="'+value+' out of 5 stars">';for(var i=1;i<=5;i++)html+='<span class="'+(i<=value?'filled':'')+'">★</span>';return html+'</span>'}
